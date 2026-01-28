@@ -43,12 +43,13 @@ def create_app():
     app.register_blueprint(main_bp)
 
     # 🔥 Render 対応：起動時に自動 migrate
-    with app.app_context():
-        try:
+    if os.environ.get("RENDER") == "true":
+        with app.app_context():
             upgrade()
             from scripts.seed import main as seed_main
             seed_main()
-        except Exception as e:
-            print("Migration skipped or failed:", e)
+
 
     return app
+
+app = create_app()
