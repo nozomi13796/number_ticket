@@ -18,12 +18,7 @@ def create_app():
     # Render の DATABASE_URL を優先
     database_url = os.environ.get("DATABASE_URL")
 
-    if database_url:
-        postgres_prefix = "postgres://"
-        if database_url.startswith(postgres_prefix):
-            database_url = database_url.replace(postgres_prefix, "postgresql://", 1)
-        pass
-    else:
+    if not database_url:
         # ローカル SQLite
         database_url = f"sqlite:///{os.path.join(app.instance_path, 'app.db')}"
 
@@ -31,6 +26,13 @@ def create_app():
         SECRET_KEY=os.environ.get("SECRET_KEY", "dev"),
         SQLALCHEMY_DATABASE_URI=database_url,
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
+
+        # 🔥 Render の無料 PostgreSQL で接続枯渇を防ぐ設定
+        SQLALCHEMY_ENGINE_OPTIONS={
+            "pool_pre_ping": True,
+            "pool_size": 1,
+            "max_overflow": 0,
+        }
     )
 
     # DB 初期化
@@ -44,17 +46,21 @@ def create_app():
     from .route import bp as main_bp
     app.register_blueprint(main_bp)
 
-    # 🔥 Render 対応：起動時に自動 migrate
+    # 🔥 Render 専用：起動時に自動 migrate + seed
     if os.environ.get("RENDER") == "true":
         with app.app_context():
             try:
+                print("Running upgrade...")
                 upgrade()
+                print("Upgrade done.")
+
+                print("Seeding initial data...")
                 from scripts.seed import main as seed_main
                 seed_main()
+                print("Seed done.")
+
             except Exception as e:
                 print(f"Migration failed: {e}")
-
-
 
     return app
 
