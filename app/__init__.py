@@ -45,9 +45,13 @@ def create_app():
     # 🔥 Render 対応：起動時に自動 migrate
     if os.environ.get("RENDER") == "true":
         with app.app_context():
-            upgrade()
-            from scripts.seed import main as seed_main
-            seed_main()
+            try:
+                upgrade()
+                from scripts.seed import main as seed_main
+                seed_main()
+            except Exception as e:
+                print(f"Migration failed: {e}")
+
 
 
     return app
