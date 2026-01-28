@@ -47,20 +47,20 @@ def create_app():
     app.register_blueprint(main_bp)
 
     # 🔥 Render 専用：起動時に自動 migrate + seed
-    if os.environ.get("RENDER") == "true":
-        with app.app_context():
-            try:
-                print("Running upgrade...")
-                upgrade()
-                print("Upgrade done.")
+    print(os.environ.get("RENDER"))
+    with app.app_context():
+        try:
+            print("Running upgrade...")
+            upgrade()
+            print("Upgrade done.")
 
-                print("Seeding initial data...")
-                from scripts.seed import main as seed_main
-                seed_main()
-                print("Seed done.")
+            print("Seeding initial data...")
+            from scripts.seed import main as seed_main
+            seed_main()
+            print("Seed done.")
 
-            except Exception as e:
-                print(f"Migration failed: {e}")
+        except Exception as e:
+            print(f"Migration failed: {e}")
 
     return app
 
