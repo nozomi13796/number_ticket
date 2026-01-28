@@ -19,7 +19,9 @@ def create_app():
     database_url = os.environ.get("DATABASE_URL")
 
     if database_url:
-        # Render の postgres URL はそのまま使える
+        postgres_prefix = "postgres://"
+        if database_url.startswith(postgres_prefix):
+            database_url = database_url.replace(postgres_prefix, "postgresql://", 1)
         pass
     else:
         # ローカル SQLite
