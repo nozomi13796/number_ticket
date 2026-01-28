@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}整理券発行{% endblock %}
+
+{% block content %}
+<div class="card bg-base-100 shadow-xl p-6 max-w-lg mx-auto">
+
+  <h1 class="text-3xl font-bold text-center mb-6">整理券発行</h1>
+
+  <form method="POST" class="space-y-6">
+
+    <!-- 利用日 -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text text-lg">ご利用日</span>
+      </label>
+      <input type="date" name="dep_date" class="input input-bordered w-full" required>
+    </div>
+
+    <!-- 支払方法 -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text text-lg">支払方法</span>
+      </label>
+      <select name="p_id" class="select select-bordered w-full">
+        {% for p in payments %}
+        <option value="{{ p.p_id }}">{{ p.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- 用件 -->
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text text-lg">用件</span>
+      </label>
+      <select name="b_id" class="select select-bordered w-full">
+        {% for b in businesses %}
+        <option value="{{ b.b_id }}">{{ b.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- ボタン -->
+    <button class="btn btn-primary w-full text-lg py-2">
+      QRコードを発行する
+    </button>
+
+  </form>
+
+</div>
+{% endblock %}

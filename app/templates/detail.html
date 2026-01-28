@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}詳細{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+
+  <h1 class="text-3xl font-bold mb-6">受付詳細</h1>
+
+  <!-- Ticket 情報 -->
+  <div class="card bg-base-100 shadow-xl p-6 mb-8">
+    <h2 class="text-2xl font-bold mb-4">受付番号：{{ ticket.number }}</h2>
+
+    <p><strong>利用日:</strong> {{ ticket.dep_date }}</p>
+    <p><strong>支払方法:</strong> {{ ticket.payment.name }}</p>
+    <p><strong>用件:</strong> {{ ticket.business.name }}</p>
+    <p><strong>駅:</strong> {{ ticket.station.name }}</p>
+
+    <p class="mt-4">
+      <strong>状態:</strong>
+      {% if ticket.status %}
+        <span class="badge badge-success">対応済</span>
+      {% else %}
+        <span class="badge badge-warning">未対応</span>
+      {% endif %}
+    </p>
+  </div>
+
+  <!-- 行程一覧 -->
+  <h2 class="text-2xl font-bold mb-4">行程一覧</h2>
+
+  {% if options %}
+  <div class="space-y-4 mb-8">
+    {% for o in options %}
+    <div class="card bg-base-100 shadow p-4">
+      <p><strong>利用日:</strong> {{ o.date }}</p>
+      <p><strong>区間:</strong> {{ o.dep_st }} → {{ o.arr_st }}</p>
+      <p><strong>人数:</strong> 大人{{ o.adults }} / 子供{{ o.childs }}</p>
+      <p><strong>基準:</strong> {{ "出発" if o.dep_or_arr else "到着" }}</p>
+      <p><strong>希望時刻:</strong> {{ o.preferred_time }}</p>
+      <p><strong>その他希望:</strong> {{ o.preference }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-gray-500 mb-8">行程はまだ入力されていません。</p>
+  {% endif %}
+
+  <!-- 対応完了ボタン -->
+  <form method="POST">
+    <button class="btn btn-primary w-full text-lg py-3">
+      対応完了にする
+    </button>
+  </form>
+
+  <a href="{{ url_for('main.list_tickets') }}" class="btn btn-outline w-full mt-4">
+    一覧へ戻る
+  </a>
+
+</div>
+{% endblock %}

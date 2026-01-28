@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}行程入力{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-6">ご利用行程の入力</h1>
+
+<!-- 行程入力フォーム -->
+<form method="POST" class="space-y-4 mb-10">
+
+  <div class="form-control">
+    <label class="label"><span class="label-text">利用日</span></label>
+    <input type="date" name="date" class="input input-bordered w-full" required>
+  </div>
+
+  <div class="form-control">
+    <label class="label"><span class="label-text">出発駅</span></label>
+    <input type="text" name="dep_st" class="input input-bordered w-full" placeholder="例: 福井" required>
+  </div>
+
+  <div class="form-control">
+    <label class="label"><span class="label-text">到着駅</span></label>
+    <input type="text" name="arr_st" class="input input-bordered w-full" placeholder="例: 金沢" required>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div class="form-control">
+      <label class="label"><span class="label-text">大人</span></label>
+      <input type="number" name="adults" value="1" min="1" class="input input-bordered w-full">
+    </div>
+
+    <div class="form-control">
+      <label class="label"><span class="label-text">子供</span></label>
+      <input type="number" name="childs" value="0" min="0" class="input input-bordered w-full">
+    </div>
+  </div>
+
+  <div class="form-control">
+    <label class="label"><span class="label-text">基準</span></label>
+    <select name="dep_or_arr" class="select select-bordered w-full">
+      <option value="1">出発時刻を基準</option>
+      <option value="0">到着時刻を基準</option>
+    </select>
+  </div>
+
+  <div class="form-control">
+    <label class="label"><span class="label-text">希望時刻</span></label>
+    <input type="time" name="preferred_time" class="input input-bordered w-full">
+  </div>
+
+  <div class="form-control">
+    <label class="label"><span class="label-text">その他希望</span></label>
+    <textarea name="preference" class="textarea textarea-bordered w-full" placeholder="例: できれば早めの便で…"></textarea>
+  </div>
+
+  <button class="btn btn-primary w-full">この行程を追加</button>
+</form>
+
+<!-- 入力済み行程一覧 -->
+{% if options %}
+<h2 class="text-xl font-bold mb-4">入力済みの行程</h2>
+
+<div class="space-y-4">
+  {% for o in options %}
+  <div class="card bg-base-100 shadow p-4">
+    <div class="flex justify-between">
+      <p class="font-bold">行程 {{ loop.index }}</p>
+    </div>
+
+    <p><strong>利用日:</strong> {{ o.date }}</p>
+    <p><strong>区間:</strong> {{ o.dep_st }} → {{ o.arr_st }}</p>
+    <p><strong>人数:</strong> 大人{{ o.adults }} / 子供{{ o.childs }}</p>
+    <p><strong>基準:</strong> {{ "出発" if o.dep_or_arr else "到着" }}</p>
+    <p><strong>希望時刻:</strong> {{ o.preferred_time }}</p>
+    <p><strong>その他希望:</strong> {{ o.preference }}</p>
+  </div>
+  {% endfor %}
+</div>
+
+<a href="{{ url_for('main.ticket', t_id=ticket.t_id) }}" class="btn btn-success w-full mt-8">
+  入力完了
+</a>
+{% endif %}
+
+{% endblock %}

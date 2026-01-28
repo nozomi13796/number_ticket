@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}受付一覧{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">受付一覧（{{ today }}）</h1>
+
+<div class="overflow-x-auto">
+  <table class="table table-zebra w-full">
+    <thead>
+      <tr>
+        <th class="text-lg">番号</th>
+        <th class="text-lg">状態</th>
+        <th class="text-lg">操作</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for t in tickets %}
+      <tr>
+        <!-- 番号 -->
+        <td class="text-xl font-bold">{{ t.number }}</td>
+
+        <!-- 状態バッジ -->
+        <td>
+          {% if not t.status %}
+            <span class="badge badge-warning text-sm">未対応</span>
+          {% else %}
+            <span class="badge badge-success text-sm">対応済</span>
+          {% endif %}
+        </td>
+
+        <!-- 詳細ボタン -->
+        <td>
+          <a href="{{ url_for('main.detail', t_id=t.t_id) }}"
+             class="btn btn-sm btn-primary">
+            詳細
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

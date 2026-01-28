@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}受付番号{% endblock %}
+
+{% block content %}
+<div class="card bg-base-100 shadow-xl p-6 text-center">
+
+  <h1 class="text-3xl font-bold mb-4">受付番号</h1>
+  <p class="text-5xl font-bold text-primary mb-6">{{ ticket.number }}</p>
+
+  <p class="mb-2">このQRコードを読み取って</p>
+  <p class="mb-4">行程入力へ進んでください</p>
+
+  <!-- QR画像（クリックで option 画面へ遷移） -->
+  <a href="{{ url_for('main.option', t_id=ticket.t_id) }}">
+    <img
+      src="data:image/png;base64,{{ qr_base64 }}"
+      alt="QRコード"
+      class="mx-auto border rounded-lg shadow cursor-pointer hover:scale-105 transition"
+    >
+  </a>
+
+  <a href="{{ url_for('main.ticket') }}" class="btn btn-outline mt-8 w-full">
+    戻る
+  </a>
+
+</div>
+{% endblock %}

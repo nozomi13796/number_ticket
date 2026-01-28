@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+*.env
+
+# Flask / Instance
+instance/
+*.db
+*.sqlite3
+
+# Migrations (auto-generated)
+migrations/versions/*.pyc
+migrations/versions/__pycache__/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Pytest / cache
+.pytest_cache/
+.cache/
+
+# Render build artifacts
+build/
+dist/
